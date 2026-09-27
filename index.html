@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#a8d8c0">
+  <meta name="description" content="日商簿記3級の仕訳を練習できるCBT風学習アプリ。基礎・応用・本試験レベル300問。">
+  <title>日商簿記3級 仕訳アプリ</title>
+  <link rel="icon" href="images/icon-512.png" type="image/png">
+  <link rel="apple-touch-icon" href="images/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">📝</div>
+        <div>
+          <h1>日商簿記3級 仕訳アプリ</h1>
+          <p>CBT風・仕訳トレーニング</p>
+        </div>
+      </div>
+      <button class="ghost-btn" id="homeBtn">🏠 ホーム</button>
+    </header>
+
+    <main>
+      <!-- HOME -->
+      <section id="homeScreen" class="screen active">
+        <div class="hero-card">
+          <div>
+            <span class="eyebrow">NISSYO BOOKKEEPING 3</span>
+            <h2>仕訳を解いて、合格力を伸ばそう。</h2>
+            <p>基礎100問・応用100問・本試験レベル100問。合計300問を収録。</p>
+          </div>
+          <div class="hero-icon">📚</div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><span>問題総数</span><strong id="totalQuestions">300</strong><small>問</small></div>
+          <div class="stat-card"><span>前回正解率</span><strong id="lastAccuracy">--</strong><small>%</small></div>
+          <div class="stat-card"><span>前回の間違い</span><strong id="wrongCount">0</strong><small>問</small></div>
+          <div class="stat-card"><span>学習回数</span><strong id="attemptCount">0</strong><small>回</small></div>
+        </div>
+
+        <div class="home-grid">
+          <div class="panel">
+            <div class="panel-title"><span>🎯</span><h3>学習を始める</h3></div>
+            <div class="level-grid">
+              <button class="level-card basic" data-level="basic">
+                <span class="level-badge">LEVEL 1</span>
+                <strong>基礎レベル</strong>
+                <small>基本仕訳を身につける</small>
+                <b>100問</b>
+              </button>
+              <button class="level-card advanced" data-level="advanced">
+                <span class="level-badge">LEVEL 2</span>
+                <strong>応用レベル</strong>
+                <small>少し複雑な仕訳に挑戦</small>
+                <b>100問</b>
+              </button>
+              <button class="level-card exam" data-level="exam">
+                <span class="level-badge">LEVEL 3</span>
+                <strong>本試験レベル</strong>
+                <small>CBT風の実戦問題</small>
+                <b>100問</b>
+              </button>
+            </div>
+            <button class="wide-btn" id="wrongPracticeBtn">❌ 前回間違えた問題だけ解く</button>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title"><span>🛠️</span><h3>その他の機能</h3></div>
+            <div class="feature-list">
+              <button class="feature-btn" id="searchBtn"><span>🔎</span><div><b>問題検索</b><small>キーワード・勘定科目から探す</small></div></button>
+              <button class="feature-btn" id="historyBtn"><span>📖</span><div><b>学習履歴</b><small>過去の結果・正答率を確認</small></div></button>
+              <button class="feature-btn" id="infoBtn"><span>ℹ️</span><div><b>使い方</b><small>このアプリの機能とルール</small></div></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="notice">
+          <b>📌 このアプリについて</b>
+          <p>日商簿記3級の仕訳学習用に作成した練習アプリです。実際の試験画面そのものではなく、CBT形式を参考にした学習用UIです。</p>
+        </div>
+      </section>
+
+      <!-- SETUP -->
+      <section id="setupScreen" class="screen">
+        <div class="section-head">
+          <button class="back-btn" id="setupBack">← 戻る</button>
+          <div>
+            <span class="eyebrow">EXAM SETUP</span>
+            <h2 id="setupTitle">問題設定</h2>
+          </div>
+        </div>
+
+        <div class="setup-card">
+          <div class="selected-level" id="selectedLevelBox"></div>
+          <div class="form-row">
+            <label>問題数</label>
+            <div class="choice-group" id="countChoices">
+              <button data-count="10">10問</button>
+              <button data-count="20" class="selected">20問</button>
+              <button data-count="30">30問</button>
+              <button data-count="50">50問</button>
+              <button data-count="100">100問</button>
+            </div>
+          </div>
+          <button class="start-btn" id="startExamBtn">🚀 試験を開始する</button>
+        </div>
+      </section>
+
+      <!-- EXAM -->
+      <section id="examScreen" class="screen exam-screen">
+        <div class="exam-top">
+          <div class="exam-info">
+            <span id="examLevelLabel">本試験レベル</span>
+            <b id="questionCounter">問題 1 / 20</b>
+          </div>
+          <button class="finish-btn" id="finishBtn">🏁 試験終了</button>
+        </div>
+
+        <div class="progress-bar"><div id="progressFill"></div></div>
+
+        <div class="exam-layout">
+          <div class="question-panel">
+            <div class="question-meta">
+              <span id="questionLevelBadge">基礎</span>
+              <span id="questionIdLabel">Q001</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+
+            <div class="entry-table-wrap">
+              <table class="entry-table">
+                <thead>
+                  <tr>
+                    <th>借方科目</th>
+                    <th>借方金額</th>
+                    <th>貸方科目</th>
+                    <th>貸方金額</th>
+                  </tr>
+                </thead>
+                <tbody id="entryBody"></tbody>
+              </table>
+            </div>
+
+            <div class="exam-actions">
+              <button class="nav-btn" id="prevBtn">← 前の問題</button>
+              <button class="nav-btn primary" id="nextBtn">次の問題 →</button>
+            </div>
+          </div>
+
+          <aside class="question-nav">
+            <div class="nav-title">問題一覧</div>
+            <div class="answer-legend">
+              <span><i class="dot answered"></i>回答済</span>
+              <span><i class="dot unanswered"></i>未回答</span>
+            </div>
+            <div id="questionButtons" class="question-buttons"></div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- CONFIRM -->
+      <section id="confirmScreen" class="screen">
+        <div class="confirm-card">
+          <div class="confirm-icon">🏁</div>
+          <h2>試験を終了しますか？</h2>
+          <p id="confirmText">未回答の問題があります。</p>
+          <div class="confirm-stats">
+            <div><span>回答済み</span><b id="confirmAnswered">0</b></div>
+            <div><span>未回答</span><b id="confirmUnanswered">0</b></div>
+          </div>
+          <div class="confirm-actions">
+            <button class="nav-btn" id="confirmCancel">← 試験に戻る</button>
+            <button class="finish-btn large" id="confirmFinish">採点する</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <section id="resultScreen" class="screen">
+        <div class="result-hero">
+          <div>
+            <span class="eyebrow">RESULT</span>
+            <h2>採点結果</h2>
+            <p id="resultMessage"></p>
+          </div>
+          <div class="score-circle">
+            <strong id="scorePercent">0%</strong>
+            <span id="scoreText">0 / 20</span>
+          </div>
+        </div>
+
+        <div class="result-grid">
+          <div class="result-stat"><span>正解</span><b class="correct-text" id="resultCorrect">0</b></div>
+          <div class="result-stat"><span>不正解</span><b class="wrong-text" id="resultWrong">0</b></div>
+          <div class="result-stat"><span>未回答</span><b id="resultBlank">0</b></div>
+          <div class="result-stat"><span>正答率</span><b id="resultAccuracy">0%</b></div>
+        </div>
+
+        <div class="result-actions">
+          <button class="start-btn small" id="retryBtn">🔄 同じ問題をもう一度</button>
+          <button class="nav-btn" id="resultHomeBtn">🏠 ホームへ</button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span>📊</span><h3>問題別結果</h3></div>
+          <div id="resultList" class="result-list"></div>
+        </div>
+      </section>
+
+      <!-- SEARCH -->
+      <section id="searchScreen" class="screen">
+        <div class="section-head">
+          <button class="back-btn" id="searchBack">← 戻る</button>
+          <div><span class="eyebrow">SEARCH</span><h2>問題検索</h2></div>
+        </div>
+        <div class="search-bar">
+          <input id="searchInput" type="search" placeholder="例：現金、売掛金、減価償却、商品…" />
+          <select id="searchLevel">
+            <option value="all">すべて</option>
+            <option value="basic">基礎</option>
+            <option value="advanced">応用</option>
+            <option value="exam">本試験レベル</option>
+          </select>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+      </section>
+
+      <!-- HISTORY -->
+      <section id="historyScreen" class="screen">
+        <div class="section-head">
+          <button class="back-btn" id="historyBack">← 戻る</button>
+          <div><span class="eyebrow">HISTORY</span><h2>学習履歴</h2></div>
+        </div>
+        <div id="historyContent"></div>
+      </section>
+
+      <!-- INFO -->
+      <section id="infoScreen" class="screen">
+        <div class="section-head">
+          <button class="back-btn" id="infoBack">← 戻る</button>
+          <div><span class="eyebrow">GUIDE</span><h2>使い方</h2></div>
+        </div>
+        <div class="panel guide">
+          <h3>📝 仕訳の入力</h3>
+          <p>借方・貸方それぞれの勘定科目を選択し、金額を入力してください。複合仕訳では2行まで使用できます。</p>
+          <h3>📝 時間制限なし</h3>
+          <p>このアプリでは時間制限を設けず、自分のペースでじっくり仕訳を解けます。</p>
+          <h3>🟢🔴 回答状況</h3>
+          <p>問題一覧の緑色は回答済み、白色は未回答です。下部のボタンで前後の問題へ移動できます。</p>
+          <h3>🏁 試験終了</h3>
+          <p>「試験終了」を押すと確認画面が表示され、そこで採点を確定できます。</p>
+          <h3>📖 学習履歴・❌間違い</h3>
+          <p>結果はこのブラウザのローカルストレージに保存されます。次回から「前回間違えた問題だけ」を選んで復習できます。</p>
+          <p class="muted">※ブラウザのデータを削除すると履歴も消えます。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>日商簿記3級 仕訳アプリ</span>
+      <span>© Learning App</span>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
+    }
+  </script>
+</body>
+</html>

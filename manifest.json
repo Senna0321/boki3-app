@@ -1,0 +1,25 @@
+{
+  "name": "日商簿記3級 仕訳アプリ",
+  "short_name": "簿記3級仕訳",
+  "description": "日商簿記3級の仕訳を練習できる学習アプリ。基礎・応用・本試験レベル300問。",
+  "lang": "ja-JP",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7fbf8",
+  "theme_color": "#a8d8c0",
+  "icons": [
+    {
+      "src": "images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
